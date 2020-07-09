@@ -65,8 +65,8 @@ public class CountryController
         List<Country> myList = new ArrayList<>();
         countryrepo.findAll().iterator().forEachRemaining(myList::add);
         long sum = myList.stream().mapToLong(c -> c.getPopulation()).sum();
-        System.out.println(sum);
-        return new ResponseEntity<>(HttpStatus.OK);
+        System.out.println("The total population is " + sum);
+        return new ResponseEntity<>("HttpStatus.OK", HttpStatus.OK);
     }
 
     // http://localhost:2019/population/min
