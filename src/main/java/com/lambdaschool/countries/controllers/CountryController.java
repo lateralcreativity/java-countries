@@ -53,12 +53,13 @@ public class CountryController
         List<Country> myList = new ArrayList<>();
         countryrepo.findAll().iterator().forEachRemaining(myList::add);
         List<Country> rtnList = findCountry(myList, c -> c.getName().charAt(0) == Character.toUpperCase(letter));
+        rtnList.sort((c1, c2) -> c1.getName().compareToIgnoreCase(c2.getName()));
 
         return new ResponseEntity<>(rtnList, HttpStatus.OK);
     }
 
     // http://localhost:2019/population/total
-//    return the total population of the all countries in the console while returning Http Status OK as the response
+    // return the total population of the all countries in the console while returning Http Status OK as the response
     @GetMapping(value="/population/total", produces = {"application/json"})
     public ResponseEntity<?> getPopulationTotal()
     {
@@ -66,12 +67,31 @@ public class CountryController
         countryrepo.findAll().iterator().forEachRemaining(myList::add);
         long sum = myList.stream().mapToLong(c -> c.getPopulation()).sum();
         System.out.println("The total population is " + sum);
+
         return new ResponseEntity<>("HttpStatus.OK", HttpStatus.OK);
     }
 
     // http://localhost:2019/population/min
     // return the country with the smallest population
+    @GetMapping(value="/population/min", produces = {"application/json"})
+    public ResponseEntity<?> getPopulationMin()
+    {
+        List<Country> myList = new ArrayList<>();
+        countryrepo.findAll().iterator().forEachRemaining(myList::add);
+        myList.sort((c1, c2) -> (int)(c1.getPopulation() - c2.getPopulation()));
+
+        return new ResponseEntity<>(myList.get(0), HttpStatus.OK);
+    }
 
     // http://localhost:2019/population/max
     // return the country with the largest population
+    @GetMapping(value="/population/max", produces = {"application/json"})
+    public ResponseEntity<?> getPopulationMax()
+    {
+        List<Country> myList = new ArrayList<>();
+        countryrepo.findAll().iterator().forEachRemaining(myList::add);
+        myList.sort((c1, c2) -> (int)(c2.getPopulation() - c1.getPopulation()));
+
+        return new ResponseEntity<>(myList.get(0), HttpStatus.OK);
+    }
 }
